@@ -6,13 +6,19 @@ A REST API for managing products and categories in an e-commerce system.
 
 - Python 3.9 / Django 4.2 / Django REST Framework
 - PostgreSQL
-- django-filter, django-mptt
+- django-filter, django-mptt, drf-spectacular
 
 ## Setup
 
 ```bash
 brew services start postgresql@18
+psql postgres -c "CREATE USER ecommerce_user WITH PASSWORD 'ecommerce_pass';"
+psql postgres -c "CREATE DATABASE ecommerce_db OWNER ecommerce_user;"
+psql postgres -c "ALTER USER ecommerce_user CREATEDB;"
+python3 -m venv venv
 source venv/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
 python manage.py runserver
 ```
 
@@ -36,6 +42,24 @@ python manage.py runserver
 | `sku` | Exact match |
 | `price_min` / `price_max` | Price range |
 | `category` | Category ID — includes subcategories |
+
+### Pagination
+
+List endpoints return paginated results (20 per page by default). Use `?page_size=N` to override (max 100).
+
+```json
+{
+  "count": 100,
+  "next": "http://localhost:8000/api/products/?page=2",
+  "previous": null,
+  "results": [...]
+}
+```
+
+### Validation
+
+- `price` must be greater than zero
+- `sku` may only contain letters, numbers, and hyphens — automatically uppercased
 
 ## Docs
 
