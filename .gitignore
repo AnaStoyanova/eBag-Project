@@ -1,0 +1,14 @@
+# IDE
+.idea/
+
+# macOS
+.DS_Store
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# Django
+media/
+db.sqlite3
